@@ -1,0 +1,52 @@
+.hero-visual {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #050506;
+}
+
+.hero-visual > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-canvas {
+  display: block;
+}
+
+/* 视频铺满并轻微放大，避免边缘缝隙 */
+.hero-video {
+  object-fit: cover;
+  transform: scale(1.02);
+  opacity: 0.85;
+  mix-blend-mode: screen;
+}
+
+/* 左侧压暗，保证文字对比度 */
+.hero-scrim {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(4, 4, 6, 0.94) 0%,
+      rgba(4, 4, 6, 0.78) 34%,
+      rgba(4, 4, 6, 0.3) 62%,
+      rgba(4, 4, 6, 0.1) 100%
+    ),
+    radial-gradient(
+      120% 80% at 15% 40%,
+      rgba(4, 4, 6, 0.6) 0%,
+      rgba(4, 4, 6, 0) 70%
+    );
+}
+
+/* 底部过渡到下一页 */
+.hero-scrim-bottom {
+  background: linear-gradient(
+    to bottom,
+    rgba(6, 6, 7, 0) 55%,
+    rgba(6, 6, 7, 0.65) 82%,
+    var(--bg) 100%
+  );
+}

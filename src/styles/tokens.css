@@ -1,0 +1,67 @@
+/* ==========================================================================
+   Design Tokens — LIN ZHOU Portfolio
+   暗色 / 克制 / 科技感。改这里就能整体换肤。
+   ========================================================================== */
+
+:root {
+  /* ---- 版面 ---- */
+  --shell-max: 1700px; /* 版心宽度 */
+  --shell-pad: clamp(20px, 3.2vw, 56px);
+  --gutter: clamp(14px, 1.4vw, 26px); /* 卡片栅格间距 */
+
+  /* ---- 色板 ---- */
+  --bg: #060607;
+  --bg-1: #09090b;
+  --bg-2: #0d0d10;
+  --surface: #0c0c0f;
+  --surface-2: #121216;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  --text: #f2f3f5;
+  --text-2: #a0a3ab;
+  --text-3: #6c7079;
+  --text-4: #4a4d55;
+
+  --accent: #8fe3ff;
+  --accent-2: #c9b8ff;
+  --accent-soft: rgba(143, 227, 255, 0.14);
+  --accent-line: rgba(143, 227, 255, 0.32);
+
+  /* ---- 字体 ---- */
+  --font-sans: 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei UI',
+    'Microsoft YaHei', system-ui, sans-serif;
+  --font-display: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei',
+    system-ui, sans-serif;
+  /* 中文标题：雅黑 Semibold 视觉重量最接近 Inter 600，避免被拉丁字重压住 */
+  --font-cn: 'Microsoft YaHei UI', 'Microsoft YaHei', 'PingFang SC',
+    'Hiragino Sans GB', 'Source Han Sans SC', 'Noto Sans CJK SC', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Cascadia Mono', Consolas,
+    'Liberation Mono', monospace;
+
+  /* ---- 排版尺度 ---- */
+  /* 中文标题字面比拉丁宽，上限压到 5.2rem 才能让「构建 AI 时代的品牌表达」排成一行 */
+  --fs-display: clamp(2.7rem, 4.9vw, 5.2rem);
+  --fs-h2: clamp(1.9rem, 3.1vw, 3.4rem);
+  --fs-h3: clamp(1.15rem, 1.35vw, 1.5rem);
+  --fs-body: clamp(0.94rem, 0.95vw, 1.0625rem);
+  --fs-small: 0.875rem;
+  --fs-label: 0.75rem;
+
+  /* ---- 间距节奏 ---- */
+  --sec-pad: clamp(96px, 9.5vw, 168px);
+  --radius: 4px;
+  --radius-lg: 6px;
+
+  /* ---- 运动 ---- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1); /* expo-out */
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur: 0.55s;
+
+  /* ---- 层级 ---- */
+  --z-bg: 0;
+  --z-content: 1;
+  --z-nav: 60;
+}

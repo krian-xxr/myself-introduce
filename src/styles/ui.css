@@ -1,0 +1,177 @@
+/* ==========================================================================
+   共用 UI 原子：按钮 / 卡片 / 标签 / 链接
+   ========================================================================== */
+
+/* ---------- 按钮 ---------- */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    color 0.4s var(--ease),
+    border-color 0.4s var(--ease),
+    transform 0.4s var(--ease);
+}
+
+.btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+.btn svg {
+  transition: transform 0.45s var(--ease);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transform: translateY(101%);
+  transition: transform 0.55s var(--ease);
+}
+
+.btn:hover svg {
+  transform: translate3d(2px, -2px, 0);
+}
+
+/* 实心 */
+.btn--solid {
+  color: #06070a;
+  background: var(--text);
+  border: 1px solid var(--text);
+}
+
+.btn--solid::before {
+  background: var(--accent);
+}
+
+.btn--solid:hover {
+  color: #04070a;
+  border-color: var(--accent);
+}
+
+.btn--solid:hover::before {
+  transform: none;
+}
+
+/* 描边 */
+.btn--ghost {
+  color: var(--text-2);
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.btn--ghost::before {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.btn--ghost:hover {
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn--ghost:hover::before {
+  transform: none;
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(170deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0) 42%),
+    var(--surface);
+  overflow: hidden;
+  transition:
+    border-color 0.5s var(--ease),
+    background-color 0.5s var(--ease),
+    transform 0.6s var(--ease);
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translate3d(0, -3px, 0);
+}
+
+/* 悬停时顶部一道高光扫过 */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.55s var(--ease);
+}
+
+.card:hover::after {
+  opacity: 0.7;
+}
+
+/* ---------- 标签 ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+  transition: border-color 0.4s var(--ease), color 0.4s var(--ease);
+}
+
+.card:hover .tag {
+  border-color: var(--line-strong);
+  color: var(--text-2);
+}
+
+/* ---------- 文字链接（下划线生长） ---------- */
+.ulink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 3px;
+  color: var(--text-2);
+  transition: color 0.4s var(--ease);
+}
+
+.ulink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease);
+}
+
+.ulink:hover {
+  color: var(--text);
+}
+
+.ulink:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
