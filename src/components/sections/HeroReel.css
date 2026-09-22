@@ -1,0 +1,297 @@
+/* ==========================================================================
+   HeroReel — 中央 3D 作品卡片簇
+   卡片位置全部由 JS 写入的 --delta / --depth / --focus 三个变量驱动：
+   --delta 与圆心的角差（度），--depth 1→0 由正对镜头到背面，--focus 只给最近的那张。
+   ========================================================================== */
+
+.reel {
+  /* 卡片宽度同时受视口宽与视口高约束：保证整簇（含下方读数）不把首屏撑破 */
+  --card-w: clamp(138px, min(16vw, 22vh), 268px);
+  --card-h: calc(var(--card-w) * 1.34);
+  --ring: calc(var(--card-w) * 0.54);
+  /* 卡片在环上时上下各有少量视觉外扩，给它留出来 */
+  --card-pad: 30px;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding-inline: clamp(54px, 6vw, 96px);
+  user-select: none;
+  touch-action: pan-y;
+}
+
+/* ---------- 舞台与环 ---------- */
+.reel__stage {
+  position: relative;
+  width: var(--card-w);
+  height: calc(var(--card-h) + var(--card-pad) * 2);
+  perspective: 1700px;
+  perspective-origin: 50% 50%;
+}
+
+.reel__deck {
+  position: absolute;
+  inset: var(--card-pad) 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ---------- 单张卡片 ---------- */
+.reel__card {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0a0a0c;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  /* 角度 → 位置：绕竖轴旋转后推出半径，再按景深补一点缩放与压暗 */
+  transform: rotateY(calc(var(--delta, 0) * -1deg)) translateZ(var(--ring))
+    scale(calc(0.9 + var(--depth, 0) * 0.1));
+  filter: brightness(calc(0.34 + var(--depth, 0) * 0.66))
+    saturate(calc(0.5 + var(--depth, 0) * 0.5));
+  transition:
+    filter 0.45s var(--ease-soft),
+    border-color 0.45s var(--ease-soft),
+    box-shadow 0.45s var(--ease-soft);
+}
+
+.reel__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  -webkit-user-drag: none;
+  transform: scale(1.02);
+  transition: transform 0.9s var(--ease);
+}
+
+/* 正对镜头的那张：细描边 + 极轻的外发光，不抢黑场的克制感 */
+.reel__card[data-front='true'] {
+  border-color: rgba(255, 255, 255, 0.42);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 46px 90px -50px rgba(0, 0, 0, 1);
+}
+
+.reel:hover .reel__card[data-front='true'] img {
+  transform: scale(1.06);
+}
+
+/* 卡片内角的微型元信息，模仿取景器上的数据读数 */
+.reel__card-meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 22px 12px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.82);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.78), transparent);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-soft);
+}
+
+.reel__card-meta em {
+  font-style: normal;
+}
+
+.reel__card-meta i {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.reel__card[data-front='true'] .reel__card-meta {
+  opacity: 1;
+}
+
+/* ---------- 交互层 ---------- */
+.reel__hit {
+  position: absolute;
+  inset: -14px;
+  z-index: 400;
+  cursor: grab;
+  border-radius: 16px;
+}
+
+.reel[data-grabbing='true'] .reel__hit {
+  cursor: grabbing;
+}
+
+.reel__hit:focus-visible {
+  outline: 1px solid var(--hud-line);
+  outline-offset: 8px;
+}
+
+/* ---------- 左右翻页按钮 ---------- */
+.reel__nav {
+  position: absolute;
+  top: 42%;
+  z-index: 500;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--hud-line);
+  border-radius: 50%;
+  color: var(--hud-label);
+  background: rgba(6, 6, 7, 0.5);
+  backdrop-filter: blur(6px);
+  transition:
+    color 0.4s var(--ease-soft),
+    border-color 0.4s var(--ease-soft),
+    transform 0.4s var(--ease);
+}
+
+.reel__nav:hover {
+  color: var(--hud-ink);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.reel__nav--prev {
+  left: 0;
+}
+
+.reel__nav--next {
+  right: 0;
+}
+
+.reel__nav--prev:hover {
+  transform: translate3d(-2px, 0, 0);
+}
+
+.reel__nav--next:hover {
+  transform: translate3d(2px, 0, 0);
+}
+
+/* ---------- 左右触点 ---------- */
+.reel__cross {
+  position: absolute;
+  top: 42%;
+  width: 13px;
+  height: 13px;
+  opacity: 0.6;
+}
+
+.reel__cross::before,
+.reel__cross::after {
+  content: '';
+  position: absolute;
+  background: var(--hud-ink);
+}
+
+.reel__cross::before {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.reel__cross::after {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.reel__cross--l {
+  left: -22px;
+}
+
+.reel__cross--r {
+  right: -22px;
+}
+
+/* ---------- 读数 ---------- */
+.reel__readout {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 4px 18px;
+  text-align: left;
+}
+
+.reel__readout-cat {
+  grid-column: 1;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--hud-dim);
+  line-height: 1.5;
+}
+
+.reel__readout-title {
+  grid-column: 1;
+  grid-row: 2;
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  line-height: 1.5;
+  color: var(--hud-label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reel__readout-idx {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: var(--hud-ink);
+}
+
+.reel__readout-idx i {
+  font-style: normal;
+  color: var(--hud-dim);
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 900px) {
+  .reel {
+    --card-w: clamp(128px, 30vw, 190px);
+    padding-inline: 48px;
+  }
+  .reel__cross {
+    display: none;
+  }
+  .reel__nav {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* 矮屏（720p 笔记本）再收一档卡片尺寸，整屏才装得下 */
+@media (max-height: 780px) {
+  .reel {
+    --card-w: clamp(116px, 11vw, 152px);
+    --card-pad: 22px;
+  }
+  .reel__readout {
+    margin-top: 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel__card img {
+    transition: none;
+  }
+}

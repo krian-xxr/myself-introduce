@@ -45,7 +45,7 @@ export const hero = {
   status: 'AVAILABLE FOR PROJECTS',
   titleLines: ['以视觉思维', '构建 AI 时代的品牌表达'],
   titleLinesEn: ['DESIGNING BRANDS', 'FOR THE AI ERA'],
-  lead: '八年品牌与界面设计经验，近三年深耕 AIGC 视觉生产链路。把审美判断、设计系统与生成式工具结合，让创意从概念到落地保持同一种精度。',
+  lead: '八年品牌与界面设计经验，近三年深耕 AIGC 视觉生产链路 —— 把审美判断、设计系统与生成式工具接进同一条工作流，让创意从概念到落地保持同一种精度。',
   primaryCta: { label: '约一个项目', href: '#contact' },
   secondaryCta: { label: '查看作品', href: '#work' },
   facts: [

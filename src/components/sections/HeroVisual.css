@@ -2,7 +2,7 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #050506;
+  background: #000;
 }
 
 .hero-visual > * {
@@ -16,37 +16,69 @@
   display: block;
 }
 
-/* 视频铺满并轻微放大，避免边缘缝隙 */
+/* 视频铺满并轻微放大，避免边缘缝隙；压得很暗，只当活体材质用 */
 .hero-video {
   object-fit: cover;
   transform: scale(1.02);
-  opacity: 0.85;
+  opacity: 0.4;
   mix-blend-mode: screen;
 }
 
-/* 左侧压暗，保证文字对比度 */
+/* 中央极弱的一团白光：让黑场不致死板，同时把视线收到卡片簇上 */
+.hero-glow {
+  background: radial-gradient(
+    46% 40% at 50% 44%,
+    rgba(214, 232, 255, 0.075) 0%,
+    rgba(150, 190, 235, 0.028) 42%,
+    rgba(0, 0, 0, 0) 72%
+  );
+}
+
+/* 细网格：贴住取景器的刻度感，几乎不可见但能被眼睛感知 */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 96px 96px;
+  background-position: center;
+  mask-image: radial-gradient(70% 60% at 50% 46%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 46%, #000 0%, transparent 78%);
+}
+
+/* 扫描线：极轻的一层，增加「取景器」的机械感 */
+.hero-scan {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.022) 0px,
+    rgba(255, 255, 255, 0.022) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0.7;
+}
+
+/* 四周压暗，中心留出卡片区 */
 .hero-scrim {
-  background:
-    linear-gradient(
-      100deg,
-      rgba(4, 4, 6, 0.94) 0%,
-      rgba(4, 4, 6, 0.78) 34%,
-      rgba(4, 4, 6, 0.3) 62%,
-      rgba(4, 4, 6, 0.1) 100%
-    ),
-    radial-gradient(
-      120% 80% at 15% 40%,
-      rgba(4, 4, 6, 0.6) 0%,
-      rgba(4, 4, 6, 0) 70%
-    );
+  background: radial-gradient(
+    118% 92% at 50% 44%,
+    rgba(0, 0, 0, 0) 30%,
+    rgba(0, 0, 0, 0.55) 72%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
 }
 
 /* 底部过渡到下一页 */
 .hero-scrim-bottom {
   background: linear-gradient(
     to bottom,
-    rgba(6, 6, 7, 0) 55%,
-    rgba(6, 6, 7, 0.65) 82%,
-    var(--bg) 100%
+    rgba(0, 0, 0, 0) 62%,
+    rgba(0, 0, 0, 0.72) 88%,
+    #000 100%
   );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scan {
+    display: none;
+  }
 }

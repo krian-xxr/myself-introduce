@@ -2,8 +2,9 @@ import { useEffect, useRef } from 'react'
 import './HeroVisual.css'
 
 /**
- * Hero 背景的「抽象光流」canvas。
- * 不依赖任何外部视频文件也能跑；video 存在时可叠加在它上面。
+ * Hero 背景：单色（黑 / 白 / 极淡冷灰）的活体材质。
+ * 只做三件事——缓慢漂移的体积雾、几乎不可见的浮尘、暗角。
+ * 不用彩色，交给 CSS 层的网格 / 扫描线 / 中心辉光去叠加。
  */
 function HeroCanvas() {
   const ref = useRef(null)
@@ -21,11 +22,10 @@ function HeroCanvas() {
     let raf = 0
     let t = 0
 
+    // 只留一条极淡的冷白雾带 + 一条更淡的暖灰，保证大黑场的呼吸感
     const bands = [
-      { y: 0.28, amp: 62, speed: 0.00016, width: 240, alpha: 0.5, hue: '210,240,255' },
-      { y: 0.46, amp: 96, speed: -0.00011, width: 340, alpha: 0.34, hue: '180,225,255' },
-      { y: 0.62, amp: 74, speed: 0.00021, width: 200, alpha: 0.42, hue: '255,255,255' },
-      { y: 0.78, amp: 118, speed: -0.00008, width: 280, alpha: 0.22, hue: '200,215,255' },
+      { y: 0.36, amp: 78, speed: 0.00013, width: 320, alpha: 0.055, hue: '226,238,255' },
+      { y: 0.68, amp: 104, speed: -0.00009, width: 380, alpha: 0.032, hue: '210,218,230' },
     ]
 
     let dust = []
@@ -38,33 +38,15 @@ function HeroCanvas() {
       canvas.height = Math.floor(h * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-      const count = Math.round(Math.min(150, Math.max(50, (w * h) / 16000)))
+      const count = Math.round(Math.min(130, Math.max(40, (w * h) / 19000)))
       dust = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        r: Math.random() * 1.25 + 0.25,
-        vx: (Math.random() - 0.5) * 0.12,
-        vy: -(Math.random() * 0.11 + 0.015),
-        a: Math.random() * 0.42 + 0.06,
+        r: Math.random() * 1.15 + 0.22,
+        vx: (Math.random() - 0.5) * 0.1,
+        vy: -(Math.random() * 0.09 + 0.012),
+        a: Math.random() * 0.3 + 0.04,
       }))
-    }
-
-    const drawGrid = () => {
-      ctx.save()
-      ctx.strokeStyle = 'rgba(255,255,255,0.028)'
-      ctx.lineWidth = 1
-      const step = 88
-      ctx.beginPath()
-      for (let x = (w % step) / 2; x < w; x += step) {
-        ctx.moveTo(x, 0)
-        ctx.lineTo(x, h)
-      }
-      for (let y = (h % step) / 2; y < h; y += step) {
-        ctx.moveTo(0, y)
-        ctx.lineTo(w, y)
-      }
-      ctx.stroke()
-      ctx.restore()
     }
 
     const drawBands = () => {
@@ -80,8 +62,8 @@ function HeroCanvas() {
         ctx.fillStyle = grad
         ctx.beginPath()
         const shift = t * b.speed * 1000
-        ctx.moveTo(-40, cy)
         const seg = 14
+        ctx.moveTo(-40, cy)
         for (let s = 0; s <= seg; s++) {
           const p = s / seg
           const x = -40 + (w + 80) * p
@@ -101,7 +83,7 @@ function HeroCanvas() {
           ctx.lineTo(x, y + b.width * (0.35 + 0.25 * Math.sin(p * 3 + shift)))
         }
         ctx.closePath()
-        ctx.filter = 'blur(34px)'
+        ctx.filter = 'blur(40px)'
         ctx.fill()
         ctx.filter = 'none'
         ctx.restore()
@@ -120,7 +102,7 @@ function HeroCanvas() {
         }
         if (d.x < -6) d.x = w + 6
         if (d.x > w + 6) d.x = -6
-        ctx.fillStyle = `rgba(226,238,255,${d.a})`
+        ctx.fillStyle = `rgba(232,240,255,${d.a})`
         ctx.beginPath()
         ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2)
         ctx.fill()
@@ -130,31 +112,16 @@ function HeroCanvas() {
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h)
-      // 深色基底
-      const base = ctx.createLinearGradient(0, 0, w * 0.6, h)
-      base.addColorStop(0, '#0b0c10')
-      base.addColorStop(0.45, '#070709')
-      base.addColorStop(1, '#040405')
-      ctx.fillStyle = base
+      ctx.fillStyle = '#000'
       ctx.fillRect(0, 0, w, h)
 
-      drawGrid()
       drawBands()
-
-      // 顶部一束斜向冷光
-      const beam = ctx.createLinearGradient(0, 0, w * 0.75, h * 0.9)
-      beam.addColorStop(0, 'rgba(180,215,255,0.10)')
-      beam.addColorStop(0.35, 'rgba(140,190,235,0.035)')
-      beam.addColorStop(1, 'rgba(0,0,0,0)')
-      ctx.fillStyle = beam
-      ctx.fillRect(0, 0, w, h)
-
       drawDust()
 
-      // 暗角
-      const vig = ctx.createRadialGradient(w * 0.5, h * 0.45, h * 0.2, w * 0.5, h * 0.5, h * 1.05)
+      // 暗角：把四周压回纯黑
+      const vig = ctx.createRadialGradient(w * 0.5, h * 0.45, h * 0.18, w * 0.5, h * 0.5, h * 1.02)
       vig.addColorStop(0, 'rgba(0,0,0,0)')
-      vig.addColorStop(1, 'rgba(0,0,0,0.82)')
+      vig.addColorStop(1, 'rgba(0,0,0,0.9)')
       ctx.fillStyle = vig
       ctx.fillRect(0, 0, w, h)
     }
@@ -199,7 +166,8 @@ function HeroCanvas() {
 }
 
 /**
- * Hero 视觉层：video（可选，放在 public/video/hero-loop.mp4）+ canvas 光流 + 渐变遮罩
+ * Hero 视觉层（由下至上）：
+ * canvas 体积雾 → video（可选，public/video/hero-loop.mp4）→ 细网格 → 扫描线 → 中心辉光 → 暗角
  */
 export default function HeroVisual({ videoSrc, poster }) {
   const videoRef = useRef(null)
@@ -230,6 +198,9 @@ export default function HeroVisual({ videoSrc, poster }) {
           }}
         />
       ) : null}
+      <div className="hero-grid" />
+      <div className="hero-scan" />
+      <div className="hero-glow" />
       <div className="hero-scrim" />
       <div className="hero-scrim-bottom" />
     </div>

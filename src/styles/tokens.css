@@ -28,6 +28,16 @@
   --accent-soft: rgba(143, 227, 255, 0.14);
   --accent-line: rgba(143, 227, 255, 0.32);
 
+  /* ---- 取景器（HUD）体系 ----
+     黑白灰一套，用在首屏：四角括号、刻痕、等宽标签、方块进度条。
+     刻意不用彩色，避免破坏大黑场的克制感。 */
+  --hud-ink: rgba(255, 255, 255, 0.92);
+  --hud-line: rgba(255, 255, 255, 0.16);
+  --hud-line-soft: rgba(255, 255, 255, 0.07);
+  --hud-label: rgba(255, 255, 255, 0.66);
+  --hud-dim: rgba(255, 255, 255, 0.34);
+  --hud-faint: rgba(255, 255, 255, 0.18);
+
   /* ---- 字体 ---- */
   --font-sans: 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont,
     'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei UI',
@@ -42,8 +52,8 @@
     'Liberation Mono', monospace;
 
   /* ---- 排版尺度 ---- */
-  /* 中文标题字面比拉丁宽，上限压到 5.2rem 才能让「构建 AI 时代的品牌表达」排成一行 */
-  --fs-display: clamp(2.7rem, 4.9vw, 5.2rem);
+  /* 中文标题字面比拉丁宽，上限压到 4.35rem 才能让「构建 AI 时代的品牌表达」排成一行 */
+  --fs-display: clamp(2.35rem, 3.85vw, 4.35rem);
   --fs-h2: clamp(1.9rem, 3.1vw, 3.4rem);
   --fs-h3: clamp(1.15rem, 1.35vw, 1.5rem);
   --fs-body: clamp(0.94rem, 0.95vw, 1.0625rem);

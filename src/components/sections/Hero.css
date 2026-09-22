@@ -1,3 +1,9 @@
+/* ==========================================================================
+   Hero — 取景器 / 首屏
+   参考语汇：纯黑场 + 四角直角括号 + 左右刻痕 + 等宽小标签 + 分段方块进度条，
+   中央是绕竖轴旋转的 3D 作品卡片簇（HeroReel）。
+   ========================================================================== */
+
 .hero {
   position: relative;
   min-height: 100svh;
@@ -6,86 +12,207 @@
   justify-content: center;
   isolation: isolate;
   overflow: hidden;
+  background: #000;
 }
 
-/* ---------- 内容 ---------- */
+/* ---------- 四角取景括号 ---------- */
+.hero__corner {
+  position: absolute;
+  z-index: 3;
+  width: 24px;
+  height: 24px;
+  border: 0 solid var(--hud-line);
+  pointer-events: none;
+}
+
+.hero__corner--tl {
+  top: 24px;
+  left: 24px;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+
+.hero__corner--tr {
+  top: 24px;
+  right: 24px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+.hero__corner--bl {
+  bottom: 24px;
+  left: 24px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+
+.hero__corner--br {
+  bottom: 24px;
+  right: 24px;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+/* ---------- 左缘刻痕 ---------- */
+.hero__gauge {
+  position: absolute;
+  left: 34px;
+  top: 50%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.hero__gauge i {
+  display: block;
+  width: 9px;
+  height: 1px;
+  background: var(--hud-faint);
+  transition: background 0.5s var(--ease-soft), width 0.5s var(--ease);
+}
+
+.hero__gauge i[data-on='true'] {
+  width: 17px;
+  background: var(--hud-label);
+}
+
+/* ---------- 内容骨架 ---------- */
 .hero__content {
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(30px, 4.6vh, 60px);
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  gap: clamp(12px, 1.8vh, 22px);
   width: 100%;
-  padding-top: 112px;
-  padding-bottom: clamp(84px, 10vh, 118px);
+  min-height: 100svh;
+  padding-top: clamp(78px, 9vh, 106px);
+  padding-bottom: clamp(66px, 8vh, 92px);
   transition: transform 0.9s var(--ease);
 }
 
-.hero__top {
+/* ---------- 顶 / 底栏 ---------- */
+.hero__bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 18px;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.16em;
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--hud-dim);
 }
 
-.hero__badge {
+.hero__bar--top {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--hud-line-soft);
+}
+
+.hero__bar--bottom {
+  padding-top: 14px;
+  border-top: 1px solid var(--hud-line-soft);
+}
+
+.hero__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.hero__brand-name {
+  color: var(--hud-ink);
+  letter-spacing: 0.26em;
+}
+
+.hero__brand-sep {
+  color: var(--hud-faint);
+}
+
+.hero__brand-role {
+  color: var(--hud-dim);
+}
+
+/* 中间那枚状态点，对应参考里顶栏居中的播放标记 */
+.hero__live {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  padding: 6px 13px 6px 11px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--text-2);
-}
-
-.hero__badge i {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px 1px rgba(143, 227, 255, 0.55);
-}
-
-.hero__top-right {
+  margin: 0;
+  color: var(--hud-label);
   white-space: nowrap;
+}
+
+.hero__live-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  box-shadow: 0 0 10px 1px rgba(143, 227, 255, 0.5);
+  animation: heroBlink 2.6s var(--ease-soft) infinite;
+}
+
+@keyframes heroBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.28;
+  }
+}
+
+.hero__coords {
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* ---------- 中央舞台 ---------- */
+.hero__stage {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  gap: clamp(4px, 0.9vh, 12px);
+  min-height: 0;
+}
+
+.hero__stage-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--hud-dim);
+  text-align: center;
+}
+
+.hero__stage-label i {
+  width: 26px;
+  height: 1px;
+  background: var(--hud-faint);
 }
 
 /* ---------- 主标题 ---------- */
 .hero__title-wrap {
   position: relative;
-}
-
-.hero__watermark {
-  position: absolute;
-  right: 0;
-  top: -0.4em;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 1.6vw, 1.9rem);
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  line-height: 1.25;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
-  pointer-events: none;
-  user-select: none;
+  text-align: center;
 }
 
 .hero__title {
   font-family: var(--font-cn);
   font-size: var(--fs-display);
   font-weight: 600;
-  line-height: 1.06;
+  line-height: 1.02;
   letter-spacing: -0.015em;
-  /* 不设 max-width：CJK 单行宽度按字号线性缩放，靠字号本身控制换行更稳 */
+  text-wrap: balance;
 }
 
 .hero__line {
@@ -98,7 +225,7 @@
   display: block;
   transform: translate3d(0, 110%, 0);
   animation: heroLineIn 1.15s var(--ease) forwards;
-  animation-delay: var(--d, 120ms);
+  animation-delay: var(--d, 160ms);
 }
 
 .hero__line:nth-child(2) .hero__line-inner {
@@ -115,10 +242,10 @@
   }
 }
 
-/* ---------- 底部信息 ---------- */
+/* ---------- 底部：说明 + 数据 ---------- */
 .hero__bottom {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   align-items: end;
   gap: clamp(28px, 5vw, 90px);
 }
@@ -126,14 +253,14 @@
 .hero__lead {
   display: flex;
   flex-direction: column;
-  gap: 26px;
-  max-width: 40rem;
+  gap: 18px;
+  max-width: 38rem;
 }
 
 .hero__lead-text {
   color: var(--text-2);
-  font-size: clamp(0.9375rem, 1.02vw, 1.0625rem);
-  line-height: 1.85;
+  font-size: clamp(0.875rem, 0.96vw, 1rem);
+  line-height: 1.8;
   text-wrap: pretty;
 }
 
@@ -144,7 +271,6 @@
   flex-wrap: wrap;
 }
 
-/* ---------- 数据 ---------- */
 .hero__facts {
   display: flex;
   justify-content: flex-end;
@@ -155,25 +281,74 @@
 .hero__fact {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   padding-left: 16px;
-  border-left: 1px solid var(--line);
+  border-left: 1px solid var(--hud-line-soft);
 }
 
 .hero__fact dt {
   font-family: var(--font-mono);
-  font-size: 0.5938rem;
-  letter-spacing: 0.16em;
+  font-size: 0.5625rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-4);
+  color: var(--hud-dim);
 }
 
 .hero__fact dd {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.35rem, 1.7vw, 1.9rem);
+  font-size: clamp(1.25rem, 1.6vw, 1.75rem);
   font-weight: 600;
   letter-spacing: -0.02em;
+}
+
+/* ---------- 底栏：方块进度条 ---------- */
+.hero__track {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+}
+
+.hud-seg {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.hud-seg i {
+  width: 6px;
+  height: 9px;
+  background: var(--hud-faint);
+  transition: background 0.45s var(--ease-soft);
+}
+
+.hud-seg i[data-on='true'] {
+  background: var(--hud-ink);
+}
+
+.hero__track-text {
+  color: var(--hud-dim);
+  white-space: nowrap;
+}
+
+.hero__cta-scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--hud-label);
+  transition: color 0.4s var(--ease-soft);
+}
+
+.hero__cta-scroll:hover {
+  color: var(--hud-ink);
+}
+
+.hero__cta-scroll svg {
+  transition: transform 0.45s var(--ease);
+}
+
+.hero__cta-scroll:hover svg {
+  transform: translate3d(0, 3px, 0);
 }
 
 /* ---------- 跑马灯 ---------- */
@@ -184,9 +359,9 @@
   bottom: 0;
   z-index: 2;
   overflow: hidden;
-  border-top: 1px solid var(--line);
-  padding: 13px 0;
-  background: linear-gradient(to right, rgba(6, 6, 7, 0.9), rgba(6, 6, 7, 0.4) 50%, rgba(6, 6, 7, 0.9));
+  border-top: 1px solid var(--hud-line-soft);
+  padding: 11px 0;
+  background: #000;
   mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
@@ -194,7 +369,7 @@
 .hero__tape-track {
   display: flex;
   width: max-content;
-  animation: tapeScroll 42s linear infinite;
+  animation: tapeScroll 46s linear infinite;
 }
 
 .hero__tape-group {
@@ -206,19 +381,18 @@
   display: inline-flex;
   align-items: center;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.22em;
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--hud-dim);
   white-space: nowrap;
 }
 
 .hero__tape-group span i {
-  width: 3px;
-  height: 3px;
+  width: 5px;
+  height: 5px;
   margin: 0 26px;
-  border-radius: 50%;
-  background: var(--accent-line);
+  background: var(--hud-faint);
 }
 
 @keyframes tapeScroll {
@@ -227,63 +401,9 @@
   }
 }
 
-/* ---------- 滚动提示 ---------- */
-.hero__scroll {
-  position: absolute;
-  right: var(--shell-pad);
-  top: 50%;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  transform: translateY(-50%);
-  color: var(--text-4);
-  transition: color 0.4s var(--ease);
-}
-
-.hero__scroll:hover {
-  color: var(--accent);
-}
-
-.hero__scroll-line {
-  position: relative;
-  width: 1px;
-  height: 74px;
-  background: var(--line);
-  overflow: hidden;
-}
-
-.hero__scroll-line i {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 1px;
-  height: 26px;
-  background: var(--accent);
-  animation: scrollDot 2.4s var(--ease-soft) infinite;
-}
-
-@keyframes scrollDot {
-  0% {
-    transform: translateY(-100%);
-  }
-  60%,
-  100% {
-    transform: translateY(300%);
-  }
-}
-
-.hero__scroll-text {
-  font-family: var(--font-mono);
-  font-size: 0.5625rem;
-  letter-spacing: 0.3em;
-  writing-mode: vertical-rl;
-}
-
 /* ---------- 响应式 ---------- */
 @media (max-width: 1240px) {
-  .hero__watermark {
+  .hero__brand-role {
     display: none;
   }
 }
@@ -296,19 +416,160 @@
   .hero__facts {
     justify-content: flex-start;
   }
-  .hero__scroll {
+  .hero__gauge {
     display: none;
   }
 }
 
-@media (max-width: 640px) {
-  .hero__top-right {
+@media (max-width: 760px) {
+  .hero__corner {
+    width: 16px;
+    height: 16px;
+  }
+  .hero__corner--tl,
+  .hero__corner--tr {
+    top: 14px;
+  }
+  .hero__corner--bl,
+  .hero__corner--br {
+    bottom: 14px;
+  }
+  .hero__corner--tl,
+  .hero__corner--bl {
+    left: 14px;
+  }
+  .hero__corner--tr,
+  .hero__corner--br {
+    right: 14px;
+  }
+  .hero__live {
     display: none;
   }
+  .hero__coords {
+    display: none;
+  }
+  .hero__bar {
+    justify-content: center;
+  }
+  .hero__bar--bottom {
+    flex-direction: column;
+    gap: 10px;
+  }
   .hero__content {
-    padding-top: 84px;
+    padding-top: 64px;
+    padding-bottom: 56px;
+  }
+  .hero__content,
+  .hero__stage {
+    grid-template-rows: auto auto auto;
   }
   .hero__facts {
-    gap: 18px;
+    gap: 16px;
+  }
+}
+
+/* 矮屏（笔记本 / 分屏）压缩纵向节奏，保证整屏仍然装得下 */
+@media (max-height: 1020px) {
+  :root {
+    --fs-display: clamp(2.2rem, 3.3vw, 3.5rem);
+  }
+  .hero__content {
+    padding-top: 76px;
+    padding-bottom: 40px;
+    gap: 6px;
+  }
+  .hero__bar--top {
+    padding-bottom: 10px;
+  }
+  .hero__bar--bottom {
+    padding-top: 9px;
+  }
+  .hero__stage {
+    gap: 0;
+  }
+  .hero__bottom {
+    gap: clamp(24px, 3.2vw, 64px);
+  }
+  .hero__lead {
+    gap: 12px;
+    max-width: 34rem;
+  }
+  .hero__lead-text {
+    font-size: 0.84375rem;
+    line-height: 1.62;
+  }
+  .hero__fact dd {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-height: 860px) {
+  :root {
+    --fs-display: clamp(1.9rem, 2.9vw, 3rem);
+  }
+  .hero__content {
+    padding-top: 74px;
+    padding-bottom: 34px;
+    gap: 4px;
+  }
+  .hero__stage {
+    gap: 0;
+  }
+  .hero__bottom {
+    gap: clamp(20px, 3vw, 48px);
+  }
+  .hero__lead {
+    gap: 11px;
+    max-width: 30rem;
+  }
+  .hero__lead-text {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+  }
+  .hero__fact dd {
+    font-size: 1.125rem;
+  }
+  .hero__fact {
+    padding-left: 12px;
+  }
+  /* 矮屏优先保住取景器的完整框，跑马灯让位 */
+  .hero__tape {
+    display: none;
+  }
+}
+
+@media (max-height: 780px) {
+  :root {
+    --fs-display: clamp(1.75rem, 2.6vw, 2.6rem);
+  }
+  .hero__content {
+    padding-top: 70px;
+    padding-bottom: 26px;
+  }
+  .hero__bar--top {
+    padding-bottom: 8px;
+  }
+  .hero__bar--bottom {
+    padding-top: 7px;
+  }
+  .hero__lead {
+    gap: 10px;
+  }
+  .hero__lead-text {
+    font-size: 0.78125rem;
+    line-height: 1.5;
+  }
+  .hero__fact dd {
+    font-size: 1.05rem;
+  }
+  .hero__fact dt {
+    font-size: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__live-dot,
+  .hero__tape-track {
+    animation: none;
   }
 }
