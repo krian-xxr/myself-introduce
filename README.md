@@ -58,10 +58,20 @@ npm run preview  # 本地预览构建产物
 ## 开发小技巧
 
 - 地址栏加 `?y=2400` 可直接定位到某一屏（仅 dev 生效），方便截图比对。
-- `.shots/cdp-shots.mjs` 是一次性走查脚本，用 headless Edge 的 CDP 接口按屏截图：
-  ```bash
-  node .shots/cdp-shots.mjs "http://127.0.0.1:5180/" '[[0,"a"],[1200,"b"]]' 1728 1000
-  ```
+- `.shots/` 下是一次性走查脚本，用 headless Edge 的 CDP 接口驱动真实浏览器：
+
+  | 脚本 | 用途 |
+  | --- | --- |
+  | `cdp-shots.mjs` | 按屏截图：`node .shots/cdp-shots.mjs "http://localhost:5180/" '[[0,"hero"],[1200,"work"]]' 1728 1000` |
+  | `cdp-eval.mjs` | 执行一段表达式文件并打印结果：`node .shots/cdp-eval.mjs <url> .shots/probe-hit.js 1728 1000` |
+  | `cdp-interact.mjs` | 触发真实指针 / 滚轮 / 键盘事件，验证卡片簇拖拽、翻页、读数 |
+  | `probe-nav.mjs` | 窄屏抽屉能否开合 + 全站横向溢出体检（默认 390×844） |
+  | `probe-click.mjs` | 点卡片是否真的跳转（防「透明层吃掉 click」这类回归） |
+  | `probe-hit.js` | `elementFromPoint` 命中体检：确认卡片本身可被 hover / 点击，而不是被覆盖层拦住 |
+
+  截图前注意：地址栏用 `localhost` 而不是 `127.0.0.1`（dev server 只监听 IPv6 的 `::1`）；
+  另外页面开了平滑滚动，`scrollTo(0,0)` 后要等一会儿再截，否则会拍到滚动中途的画面。
+
 
 ## 交互与可用性
 
