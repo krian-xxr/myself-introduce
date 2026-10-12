@@ -7,7 +7,6 @@ import {
   featured,
   hero,
   projects,
-  site,
 } from '../../data/content'
 import { usePointerParallax } from '../../hooks/useSiteEffects'
 import HeroReel from './HeroReel'
@@ -86,9 +85,7 @@ export default function Hero() {
     <section className="hero" id="hero">
       <HeroVisual videoSrc={HERO_VIDEO_SRC} poster={HERO_VIDEO_POSTER} />
 
-      {/* 取景框四角 */}
-      <span className="hero__corner hero__corner--tl" aria-hidden="true" />
-      <span className="hero__corner hero__corner--tr" aria-hidden="true" />
+      {/* 取景框下缘折角；上缘两枚折角在固定的页面头部（Nav）里，两处合成整屏的框 */}
       <span className="hero__corner hero__corner--bl" aria-hidden="true" />
       <span className="hero__corner hero__corner--br" aria-hidden="true" />
 
@@ -103,26 +100,6 @@ export default function Hero() {
         className="hero__content shell"
         style={{ transform: `translate3d(${shiftX}px, ${shiftY}px, 0)` }}
       >
-        {/* ---- 顶栏 ---- */}
-        <header className="hero__bar hero__bar--top">
-          <p className="hero__brand">
-            <span className="hero__brand-name">{site.name}</span>
-            <span className="hero__brand-sep" aria-hidden="true">
-              /
-            </span>
-            <span className="hero__brand-role">{site.roleEn}</span>
-          </p>
-
-          <p className="hero__live">
-            <span className="hero__live-dot" aria-hidden="true" />
-            {site.available}
-          </p>
-
-          <p className="hero__coords">
-            {site.location} · {site.timezone}
-          </p>
-        </header>
-
         {/* ---- 中央：取景器 + 3D 卡片簇 ---- */}
         <div className="hero__stage">
           <p className="hero__stage-label" aria-hidden="true">

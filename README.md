@@ -58,7 +58,7 @@ npm run preview  # 本地预览构建产物
 ## 开发小技巧
 
 - 地址栏加 `?y=2400` 可直接定位到某一屏（仅 dev 生效），方便截图比对。
-- `.shots/` 下是一次性走查脚本，用 headless Edge 的 CDP 接口驱动真实浏览器：
+- 走查脚本放在仓库同级目录 `question/.shots/`（不在这个包内），用 headless Edge 的 CDP 接口驱动真实浏览器：
 
   | 脚本 | 用途 |
   | --- | --- |

@@ -15,7 +15,7 @@
   background: #000;
 }
 
-/* ---------- 四角取景括号 ---------- */
+/* ---------- 取景括号（只有下缘两角；上缘在固定的页面头部里） ---------- */
 .hero__corner {
   position: absolute;
   z-index: 3;
@@ -23,20 +23,6 @@
   height: 24px;
   border: 0 solid var(--hud-line);
   pointer-events: none;
-}
-
-.hero__corner--tl {
-  top: 24px;
-  left: 24px;
-  border-top-width: 1px;
-  border-left-width: 1px;
-}
-
-.hero__corner--tr {
-  top: 24px;
-  right: 24px;
-  border-top-width: 1px;
-  border-right-width: 1px;
 }
 
 .hero__corner--bl {
@@ -94,7 +80,7 @@
   transition: transform 0.9s var(--ease);
 }
 
-/* ---------- 顶 / 底栏 ---------- */
+/* ---------- 底栏 ---------- */
 .hero__bar {
   display: flex;
   align-items: center;
@@ -107,68 +93,9 @@
   color: var(--hud-dim);
 }
 
-.hero__bar--top {
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--hud-line-soft);
-}
-
 .hero__bar--bottom {
   padding-top: 14px;
   border-top: 1px solid var(--hud-line-soft);
-}
-
-.hero__brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-  white-space: nowrap;
-}
-
-.hero__brand-name {
-  color: var(--hud-ink);
-  letter-spacing: 0.26em;
-}
-
-.hero__brand-sep {
-  color: var(--hud-faint);
-}
-
-.hero__brand-role {
-  color: var(--hud-dim);
-}
-
-/* 中间那枚状态点，对应参考里顶栏居中的播放标记 */
-.hero__live {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  margin: 0;
-  color: var(--hud-label);
-  white-space: nowrap;
-}
-
-.hero__live-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--accent);
-  box-shadow: 0 0 10px 1px rgba(143, 227, 255, 0.5);
-  animation: heroBlink 2.6s var(--ease-soft) infinite;
-}
-
-@keyframes heroBlink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.28;
-  }
-}
-
-.hero__coords {
-  margin: 0;
-  white-space: nowrap;
 }
 
 /* ---------- 中央舞台 ---------- */
@@ -402,12 +329,6 @@
 }
 
 /* ---------- 响应式 ---------- */
-@media (max-width: 1240px) {
-  .hero__brand-role {
-    display: none;
-  }
-}
-
 @media (max-width: 1000px) {
   .hero__bottom {
     grid-template-columns: 1fr;
@@ -426,27 +347,15 @@
     width: 16px;
     height: 16px;
   }
-  .hero__corner--tl,
-  .hero__corner--tr {
-    top: 14px;
-  }
   .hero__corner--bl,
   .hero__corner--br {
     bottom: 14px;
   }
-  .hero__corner--tl,
   .hero__corner--bl {
     left: 14px;
   }
-  .hero__corner--tr,
   .hero__corner--br {
     right: 14px;
-  }
-  .hero__live {
-    display: none;
-  }
-  .hero__coords {
-    display: none;
   }
   .hero__bar {
     justify-content: center;
@@ -477,9 +386,6 @@
     padding-top: 76px;
     padding-bottom: 40px;
     gap: 6px;
-  }
-  .hero__bar--top {
-    padding-bottom: 10px;
   }
   .hero__bar--bottom {
     padding-top: 9px;
@@ -546,9 +452,6 @@
     padding-top: 70px;
     padding-bottom: 26px;
   }
-  .hero__bar--top {
-    padding-bottom: 8px;
-  }
   .hero__bar--bottom {
     padding-top: 7px;
   }
@@ -568,7 +471,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__live-dot,
   .hero__tape-track {
     animation: none;
   }
