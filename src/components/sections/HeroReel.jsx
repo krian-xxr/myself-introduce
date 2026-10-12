@@ -198,9 +198,13 @@ export default function HeroReel({ items = [], onOpen }) {
     setGrabbing(false)
     e?.currentTarget?.releasePointerCapture?.(e.pointerId)
 
-    // 位移很小视为点击：交给卡片自身的链接处理
+    // 位移很小视为点击。
+    // 指针捕获会把 click 事件重定向到舞台这一层，卡片的 <a> 收不到，
+    // 所以这里直接替它跳转，保证「点一下就去看作品」这条路径不会断。
     if (d.moved < 6) {
       vel.current = 0
+      const item = deck[indexRef.current]
+      if (item && onOpen) onOpen(item)
       return
     }
 
@@ -225,9 +229,9 @@ export default function HeroReel({ items = [], onOpen }) {
    * 滚轮必须用非 passive 监听：React 的 onWheel 是 passive 的，
    * 在里面 preventDefault 无效，页面会连同卡片一起滚动。
    */
-  const hitRef = useRef(null)
+  const surfaceRef = useRef(null)
   useEffect(() => {
-    const el = hitRef.current
+    const el = surfaceRef.current
     if (!el) return
     const handler = (e) => onWheel(e)
     el.addEventListener('wheel', handler, { passive: false })
@@ -278,7 +282,24 @@ export default function HeroReel({ items = [], onOpen }) {
         </svg>
       </button>
 
-      <div className="reel__stage">
+      {/*
+        拖拽 / 滚轮 / 键盘全部挂在这一层。
+        这里刻意不再放「盖在卡片之上的透明交互层」：那样卡片既收不到 hover（读数不会跟随），
+        也收不到 click（指针捕获会把 click 重定向到交互层），点卡片跳转和悬停读数都会一起失效。
+        卡片的事件会冒泡到舞台，所以拖拽照样跟手。
+      */}
+      <div
+        className="reel__stage"
+        ref={surfaceRef}
+        tabIndex={0}
+        role="group"
+        aria-label="作品卡片簇：可拖拽旋转，或用左右方向键切换"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onKeyDown={onKeyDown}
+      >
         <div
           className="reel__deck"
           ref={deckRef}
@@ -324,20 +345,6 @@ export default function HeroReel({ items = [], onOpen }) {
             </a>
           ))}
         </div>
-
-        {/* 拖拽 / 滚轮 / 键盘的交互层，盖在卡片之上 */}
-        <div
-          className="reel__hit"
-          ref={hitRef}
-          tabIndex={0}
-          role="group"
-          aria-label="作品卡片簇：可拖拽旋转，或用左右方向键切换"
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerCancel={endDrag}
-          onKeyDown={onKeyDown}
-        />
       </div>
 
       <button

@@ -28,6 +28,8 @@
   height: calc(var(--card-h) + var(--card-pad) * 2);
   perspective: 1700px;
   perspective-origin: 50% 50%;
+  cursor: grab;
+  border-radius: 16px;
 }
 
 .reel__deck {
@@ -114,22 +116,22 @@
   opacity: 1;
 }
 
-/* ---------- 交互层 ---------- */
-.reel__hit {
-  position: absolute;
-  inset: -14px;
-  z-index: 400;
-  cursor: grab;
-  border-radius: 16px;
-}
-
-.reel[data-grabbing='true'] .reel__hit {
+/* ---------- 拖拽面 = 舞台本身 ----------
+   不再用透明层盖住卡片：拖拽 / 滚轮 / 键盘挂在 .reel__stage 上，
+   卡片的 hover 与 click 才能落到卡片自己身上。 */
+.reel[data-grabbing='true'] .reel__stage,
+.reel[data-grabbing='true'] .reel__card {
   cursor: grabbing;
 }
 
-.reel__hit:focus-visible {
+.reel__stage:focus-visible {
   outline: 1px solid var(--hud-line);
   outline-offset: 8px;
+}
+
+/* 卡片是链接，链接默认是 pointer 手势，这里统一成抓取（可拖拽） */
+.reel__card {
+  cursor: grab;
 }
 
 /* ---------- 左右翻页按钮 ---------- */
