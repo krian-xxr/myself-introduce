@@ -263,6 +263,15 @@
   color: var(--text-4);
 }
 
+/**
+ * 关着的抽屉必须真的不可见。
+ * 窄屏媒体查询里的 display:flex 是作者样式，会盖掉浏览器内置的 [hidden]{display:none}，
+ * 光靠 JSX 的 hidden 属性关不掉 —— 这里用 [hidden] 提高特异性把它压回去。
+ */
+.nav__drawer[hidden] {
+  display: none;
+}
+
 /* ---------- 响应式 ---------- */
 @media (max-width: 1180px) {
   .nav__status {
