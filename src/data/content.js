@@ -34,11 +34,11 @@ export const site = {
 }
 
 export const nav = [
-  { id: 'hero', label: '首页', en: 'Home', href: '#hero' },
-  { id: 'work', label: '精选项目', en: 'Work', href: '#work' },
   { id: 'about', label: '个人经历', en: 'About', href: '#about' },
-  { id: 'capability', label: '个人优势', en: 'Capability', href: '#capability' },
-  { id: 'contact', label: '联系我', en: 'Contact', href: '#contact' },
+  { id: 'aivisual', label: 'AI 视觉', en: 'AI Visual', href: '#aivisual' },
+  { id: 'three', label: '三维作品', en: '3D Work', href: '#three' },
+  { id: 'mg', label: 'MG 动画', en: 'Motion', href: '#mg' },
+  { id: 'estate', label: '地产广告', en: 'Real Estate', href: '#estate' },
 ]
 
 export const hero = {
@@ -47,70 +47,120 @@ export const hero = {
   titleLinesEn: ['DESIGNING BRANDS', 'FOR THE AI ERA'],
   lead: '八年品牌与界面设计经验，近三年深耕 AIGC 视觉生产链路 —— 把审美判断、设计系统与生成式工具接进同一条工作流，让创意从概念到落地保持同一种精度。',
   primaryCta: { label: '约一个项目', href: '#contact' },
-  secondaryCta: { label: '查看作品', href: '#work' },
+  secondaryCta: { label: '查看作品', href: '#aivisual' },
   facts: [
     { k: 'Years', v: '8+' },
     { k: 'Projects', v: '120+' },
     { k: 'Based in', v: 'Shanghai' },
   ],
   marquee: [
-    'BRAND IDENTITY',
-    'UI / UX DESIGN',
-    'AI VISUAL DIRECTION',
-    'MOTION DESIGN',
-    'DESIGN SYSTEM',
-    'COMMERCIAL KEY VISUAL',
+    'AI VISUAL',
+    '3D WORK',
+    'MOTION GRAPHICS',
+    'REAL ESTATE',
+    'KEY VISUAL',
+    'PORTRAIT',
   ],
 }
 
-export const featured = {
-  index: '01',
-  title: 'NEON GLYPH — 新消费品牌全案视觉系统',
-  category: '品牌全案 / 视觉系统',
-  year: '2025',
-  image: asset('img/work-01.webp'),
-  summary:
-    '从品牌策略、标志系统到电商与线下物料的完整落地，用一套可延展的视觉语言支撑 12 个 SKU 与 3 条产品线。',
-  stats: [
-    { k: '交付周期', v: '10 周' },
-    { k: '物料落地', v: '240+' },
-    { k: '转化提升', v: '+38%' },
-  ],
-  tags: ['Branding', 'Art Direction', 'Packaging'],
-}
-
-export const projects = [
+/**
+ * 作品板块：页面的四个大类，一个类一个板块。
+ * 每块 = 大标题 + 一句导语 + 一张整宽主推卡（featured）+ 可选的参与项目清单（credits）。
+ * 换成真实作品时：替换 image，改 title / summary / tags / stats，credits 里逐条列参与过的项目。
+ */
+export const categories = [
   {
-    id: 'p02',
+    id: 'aivisual',
+    index: '01',
+    cn: 'AI 视觉',
+    en: 'AI Visual',
+    sub: '把生成式模型接进真实生产链路',
+    lead: '模型选型、LoRA 训练、提示词工程到批量可控出图 —— 让单张出图的运气变成可复用的方法。',
+    featured: {
+      title: 'PARTICLE FIELD — AIGC 影像实验',
+      category: 'AI 影像 / 生成式视觉',
+      year: '2025',
+      image: asset('img/work-03.webp'),
+      summary:
+        '以粒子与体积光为媒介的系列影像实验，打通 ComfyUI 工作流与后期合成，产出 24 条品牌短片。',
+      stats: [
+        { k: '产出条数', v: '24' },
+        { k: '工作流复用', v: '6 套' },
+        { k: '出图周期', v: '-62%' },
+      ],
+      tags: ['AIGC', 'Prompt System', 'LoRA'],
+    },
+  },
+  {
+    id: 'three',
     index: '02',
-    title: 'HALO OS — AI 助手产品界面与设计系统',
-    category: '产品界面 / 设计系统',
-    year: '2025',
-    image: asset('img/work-02.webp'),
-    summary:
-      '为生成式 AI 助手定义暗色设计语言，构建 160+ 组件的设计系统，覆盖 Web 与桌面端。',
-    tags: ['UI/UX', 'Design System', 'AI Product'],
+    cn: '三维作品',
+    en: '3D Work',
+    sub: '从建模、材质到打光的完整三维表达',
+    lead: '产品级材质与光影，静态渲染或三维合成的动态镜头，用来支撑主视觉与电商场景。',
+    featured: {
+      title: 'FOLDED LIGHT — 三维主视觉',
+      category: '三维渲染 / 主视觉',
+      year: '2025',
+      image: asset('img/work-04.webp'),
+      summary: '以金属织物质感为核心概念，完成年度主视觉、展厅空间与线上商城的统一表达。',
+      stats: [
+        { k: '渲染帧数', v: '1.2K' },
+        { k: '材质球', v: '38' },
+        { k: '交付周期', v: '6 周' },
+      ],
+      tags: ['3D', 'C4D', 'Redshift'],
+    },
   },
   {
-    id: 'p03',
+    id: 'mg',
     index: '03',
-    title: 'PARTICLE FIELD — AIGC 影像艺术实验',
-    category: 'AI 影像 / 动态设计',
-    year: '2024',
-    image: asset('img/work-03.webp'),
-    summary:
-      '以粒子与体积光为媒介的系列影像实验，打通 ComfyUI 工作流与后期合成，产出 24 条品牌短片。',
-    tags: ['AIGC', 'Motion', '3D Visual'],
+    cn: 'MG 动画',
+    en: 'Motion Graphics',
+    sub: '让静态视觉在时间维度上继续讲话',
+    lead: '分镜、节奏、转场与信息图表动画 —— 从品牌片头到产品说明，按内容需要设计动效语言。',
+    featured: {
+      title: 'NEON GLYPH — 动态图形系统',
+      category: 'MG 动画 / 品牌动效',
+      year: '2025',
+      image: asset('img/work-01.webp'),
+      summary:
+        '为品牌建立一套可延展的动效语言：标志演绎、转场、字幕与图表动画，覆盖 40+ 条成片。',
+      stats: [
+        { k: '成片', v: '40+' },
+        { k: '动效组件', v: '62' },
+        { k: '最长片长', v: '3:20' },
+      ],
+      tags: ['Motion Graphics', 'AE', 'Kinetic Type'],
+    },
   },
   {
-    id: 'p04',
+    id: 'estate',
     index: '04',
-    title: 'FOLDED LIGHT — 高端家居品牌主视觉',
-    category: '主视觉 / 商业摄影指导',
-    year: '2024',
-    image: asset('img/work-04.webp'),
-    summary: '以金属织物质感为核心概念，完成年度主视觉、展厅空间与线上商城的统一表达。',
-    tags: ['Key Visual', 'Art Direction', 'Retail'],
+    cn: '地产广告',
+    en: 'Real Estate',
+    sub: '参与项目 · 从主视觉到全渠道物料',
+    lead: '楼盘主视觉、案场物料、渠道画面与交付期传播 —— 这类项目我多以参与方身份进入，配合策划与销售节点推进。',
+    featured: {
+      title: 'HALO ESTATE — 地产整合视觉',
+      category: '地产广告 / 整合传播',
+      year: '2025',
+      image: asset('img/work-02.webp'),
+      summary:
+        '从案名策略、主视觉到案场与线上渠道的全套物料，配合开盘、加推与交付三个关键节点。',
+      stats: [
+        { k: '物料', v: '180+' },
+        { k: '推广节点', v: '3 轮' },
+        { k: '合作周期', v: '9 个月' },
+      ],
+      tags: ['Real Estate', 'Key Visual', 'Campaign'],
+    },
+    credits: [
+      { year: '2025', title: '云栖澜庭 — 开盘期整合推广', role: '主视觉 / 物料' },
+      { year: '2024', title: '星河界 — 加推期渠道画面', role: '视觉执行' },
+      { year: '2024', title: '山水合院 — 交付期传播', role: '画面设计' },
+      { year: '2023', title: '海棠印 — 案场包装', role: '参与设计' },
+    ],
   },
 ]
 

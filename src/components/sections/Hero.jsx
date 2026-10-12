@@ -4,34 +4,24 @@ import {
   HERO_VIDEO_POSTER,
   HERO_VIDEO_SRC,
   about,
-  featured,
+  categories,
   hero,
-  projects,
 } from '../../data/content'
 import { usePointerParallax } from '../../hooks/useSiteEffects'
 import HeroReel from './HeroReel'
 import HeroVisual from './HeroVisual'
 import './Hero.css'
 
-/** 首屏卡片簇的数据源：主推项目 + 三个精选项目 + 个人影像 */
+/** 首屏卡片簇的数据源：四个作品板块各出一张 + 个人影像 */
 const REEL_ITEMS = [
-  {
-    id: featured.index === '01' ? 'reel-featured' : 'reel-featured',
-    index: featured.index,
-    title: featured.title,
-    category: featured.category,
-    year: featured.year,
-    image: featured.image,
-    href: '#work',
-  },
-  ...projects.map((p) => ({
-    id: `reel-${p.id}`,
-    index: p.index,
-    title: p.title,
-    category: p.category,
-    year: p.year,
-    image: p.image,
-    href: '#work',
+  ...categories.map((c) => ({
+    id: `reel-${c.id}`,
+    index: c.index,
+    title: c.featured.title,
+    category: c.featured.category,
+    year: c.featured.year,
+    image: c.featured.image,
+    href: `#${c.id}`,
   })),
   {
     id: 'reel-about',
@@ -73,7 +63,7 @@ export default function Hero() {
   }, [])
 
   const focusWork = useCallback((item) => {
-    const el = document.querySelector(item?.href || '#work')
+    const el = document.querySelector(item?.href || '#aivisual')
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 
@@ -159,7 +149,7 @@ export default function Hero() {
             <span className="hero__track-text">Aspect 16:9 · Reel {REEL_ITEMS.length} Cuts</span>
           </p>
 
-          <a className="hero__cta-scroll" href="#work">
+          <a className="hero__cta-scroll" href="#aivisual">
             <span className="hero__cta-scroll-label">Scroll to Index</span>
             <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
               <path

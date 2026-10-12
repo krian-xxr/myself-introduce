@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Category — 作品板块里「参与项目」清单
+   一条一行：年份 / 项目名 / 角色，靠上下细线分隔，和站内其他清单同一套语汇。
+   ========================================================================== */
+
+.cat__credits {
+  margin-top: clamp(28px, 3.4vw, 56px);
+}
+
+.cat__credits-label {
+  display: block;
+  margin-bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.cat__credits-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.cat__credit {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: clamp(16px, 2.4vw, 40px);
+  padding: 15px 2px;
+  border-bottom: 1px solid var(--line);
+  transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+
+.cat__credit:hover {
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom-color: var(--line-strong);
+}
+
+.cat__credit-year {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  color: var(--text-4);
+}
+
+.cat__credit-title {
+  font-size: clamp(0.875rem, 1vw, 1rem);
+  color: var(--text-2);
+  transition: color 0.35s var(--ease);
+}
+
+.cat__credit:hover .cat__credit-title {
+  color: var(--text);
+}
+
+.cat__credit-role {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.14em;
+  color: var(--text-4);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .cat__credit {
+    grid-template-columns: 64px minmax(0, 1fr);
+    row-gap: 6px;
+  }
+  .cat__credit-role {
+    grid-column: 2;
+  }
+}

@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import Nav from './components/layout/Nav'
 import About from './components/sections/About'
-import Capabilities from './components/sections/Capabilities'
+import Category from './components/sections/Category'
 import Contact from './components/sections/Contact'
 import Hero from './components/sections/Hero'
-import Work from './components/sections/Work'
+import { categories } from './data/content'
 import { useReveal } from './hooks/useSiteEffects'
 
 export default function App() {
@@ -33,9 +33,10 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
-        <Work />
         <About />
-        <Capabilities />
+        {categories.map((c) => (
+          <Category key={c.id} data={c} />
+        ))}
         <Contact />
       </main>
     </>

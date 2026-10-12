@@ -12,15 +12,38 @@ npm run build    # 产出 dist/
 npm run preview  # 本地预览构建产物
 ```
 
-## 页面结构（单页，5 个模块）
+## 页面结构（单页，5 个大标题 + 首屏 + 收尾）
+
+导航里那 5 项就是页面的 5 个大标题（首页 / 联系我 分别由左侧品牌和右侧 ▷ LET'S TALK 承担，不占菜单位）：
 
 | 顺序 | 模块 | 文件 | 说明 |
 | --- | --- | --- | --- |
-| 1 | 全屏首页 Hero | `src/components/sections/Hero.jsx` | 视频背景 + canvas 光流、大标题、导航栏、联系按钮、跑马灯 |
-| 2 | 精选项目 | `src/components/sections/Work.jsx` | 1 张整宽主推大卡 + 3 张等宽卡片 |
-| 3 | 个人经历 | `src/components/sections/About.jsx` | 人物图、个人介绍、联系方式、项目数据、经历时间轴 |
-| 4 | 个人优势 | `src/components/sections/Capabilities.jsx` | 4 张能力卡片（桌面端错落排布） |
-| 5 | 底部联系方式 | `src/components/sections/Contact.jsx` | 整屏收尾页：大字标题 + 大邮箱按钮 + 联系方式 + 页脚 |
+| 0 | 全屏首页 Hero | `src/components/sections/Hero.jsx` | 光流背景、扇开的作品卡片簇、大标题、联系按钮、跑马灯 |
+| 1 | 个人经历 | `src/components/sections/About.jsx` | 人物图、个人介绍、联系方式、项目数据、经历时间轴 |
+| 1b | └ 个人优势 | `src/components/sections/Capabilities.jsx` | 作为「个人经历」的子块嵌在里面（4 张能力卡片），不再单独占一个大标题 |
+| 2 | AI 视觉 | `src/components/sections/Category.jsx` | 由 `content.js` 的 `categories` 渲染，一个类一块 |
+| 3 | 三维作品 | 同上 | 板块 = 大标题 + 导语 + 整宽主推卡 |
+| 4 | MG 动画 | 同上 | |
+| 5 | 地产广告 | 同上 | 额外出「参与项目 / Credits」清单（`data.credits`） |
+| 6 | 底部联系方式 | `src/components/sections/Contact.jsx` | 整屏收尾页：大字标题 + 大邮箱按钮 + 联系方式 + 页脚 |
+
+## 加 / 改作品板块
+
+`src/data/content.js` 里的 `categories` 数组驱动 2~5 号板块，**加一类就加一个对象**：
+
+```js
+{
+  id: 'aivisual',            // 同时是 section id 和导航锚点
+  index: '01', cn: 'AI 视觉', en: 'AI Visual',
+  sub: '大标题下面那行小字',
+  lead: '右侧导语',
+  featured: { title, category, year, image, summary, stats, tags },  // 整宽主推卡
+  credits: [ { year, title, role } ],   // 可选：参与项目清单
+}
+```
+
+导航项在同一个文件的 `nav` 数组里，两边的 `id` 要对得上，否则导航高亮和锚点会失效。
+
 
 ## 改内容只看一个文件
 

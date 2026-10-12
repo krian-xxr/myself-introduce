@@ -1,11 +1,40 @@
 /* ==========================================================================
-   个人优势
+   个人优势 —— 现在是「个人经历」板块里的子块，不再单独占一个大标题
    ========================================================================== */
 
 .caps {
   position: relative;
   overflow: hidden;
   background: var(--bg);
+}
+
+/* 并进个人经历后的内边距与标题层级 */
+.caps--embedded {
+  margin-top: clamp(56px, 6vw, 96px);
+  padding-top: clamp(48px, 5vw, 80px);
+  border-top: 1px solid var(--line);
+}
+
+.caps__head {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: clamp(20px, 4vw, 80px);
+  margin-bottom: clamp(28px, 3vw, 46px);
+}
+
+.caps__lead {
+  font-size: clamp(0.875rem, 0.95vw, 1rem);
+  line-height: 1.85;
+  color: var(--text-3);
+  text-wrap: pretty;
+}
+
+@media (max-width: 900px) {
+  .caps__head {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 }
 
 .caps__glow {

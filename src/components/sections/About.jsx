@@ -1,6 +1,7 @@
 import { ArrowUpRight, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import { about, site } from '../../data/content'
 import { useCountUp, useInViewOnce } from '../../hooks/useSiteEffects'
+import Capabilities from './Capabilities'
 import './About.css'
 
 const CONTACT_ICONS = { Mail, Phone, MessageCircle, MapPin }
@@ -143,6 +144,9 @@ export default function About() {
             ))}
           </ol>
         </div>
+
+        {/* 个人优势并进这里，作为经历板块的子块 */}
+        <Capabilities />
       </div>
 
       <img className="about__visual" src={about.visual} alt="" aria-hidden="true" loading="lazy" />

@@ -327,7 +327,7 @@ export default function HeroReel({ items = [], onOpen }) {
               ref={(n) => {
                 cardsRef.current[i] = n
               }}
-              href={item.href || '#work'}
+              href={item.href || '#aivisual'}
               role="option"
               aria-selected={i === activeIdx}
               data-front="false"
