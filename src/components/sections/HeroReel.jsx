@@ -2,7 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import './HeroReel.css'
 
 /**
- * Hero 中央的作品卡片簇：绕竖轴做 3D 旋转的环形卡片组。
+ * Hero 中央的作品卡片簇：对称铺开的扇形卡片组。
+ *
+ * 和参考「Aspect Test」一致：卡片不是绕整圈转的转盘，而是一把摊开的牌 ——
+ * 正对镜头的那张在中间，两侧各若干张依次后退、转角、变窄变暗一点点，
+ * 整把牌一起移动，走到头的那张从另一边绕回来（绕回时已经淡出，看不到瞬移）。
  *
  * 交互：
  *  - 自动匀速旋转（悬停 / 拖拽 / 无焦点 / 离开视口 / 减少动效时暂停）
@@ -12,16 +16,20 @@ import './HeroReel.css'
  *  - 悬停某张卡片时，下方读数切换成该卡片的项目信息
  */
 
-const STEP = 60 // 每张卡片占的圆心角
+const CARD_MAX = 7 // 最多摊 7 张，再多就糊成一片了
+const FAN_SPAN = 90 // 整个扇形张开的圆心角（度）：±45°，参考里大概就是这个宽度
+const FADE_FROM = 48 // 角差超过这里开始淡出
+const FADE_TO = 60 // 到这里完全透明（绕回另一侧的动作发生在这个区间里）
 const AUTOPLAY = 2.6 // 自动旋转速度（度 / 秒）
 const DEG_PER_PX = 0.34 // 拖拽灵敏度（度 / 像素）
 const DAMP = 0.94 // 惯性衰减
 const STOP_SPEED = 2.6 // 低于该角速度就吸附对齐
-const CARD_MAX = 6 // 最多显示 6 张，避免卡片过多挤成一片
 
 export default function HeroReel({ items = [], onOpen }) {
   const deck = items.slice(0, CARD_MAX)
   const count = deck.length
+  // 每张卡片占的圆心角：扇面张角固定，卡片数量变了只改间距，扇面宽度不变
+  const STEP = count > 1 ? FAN_SPAN / (count - 1) : 0
 
   const deckRef = useRef(null)
   const cardsRef = useRef([])
@@ -41,43 +49,47 @@ export default function HeroReel({ items = [], onOpen }) {
 
   /* ---------- 渲染：把角度写进 DOM，避免每帧 setState ---------- */
   const render = useCallback(() => {
-    const a = angle.current
-    const el = deckRef.current
-    if (el) {
-      el.style.transform = `translateZ(-118px) rotateY(${a.toFixed(2)}deg)`
+    const list = cardsRef.current
+    if (!list.length || !STEP) return
+
+    const pos = angle.current / STEP
+    const idx = Math.round(pos)
+    const frac = angle.current - idx * STEP // 两个卡位之间的余量：整把牌一起平移
+    const half = Math.floor(count / 2)
+
+    // 把任意整数偏移折回 [-half, half]：走到扇形尽头的那张从另一边绕回来
+    const wrap = (n) => {
+      let k = ((n % count) + count) % count
+      if (k > half) k -= count
+      return k
     }
 
-    const list = cardsRef.current
-    const deltas = []
-    for (let i = 0; i < list.length; i += 1) {
-      // 归一化到 (-180, 180]：0 表示正对镜头
-      const delta = ((((i * STEP - a) % 360) + 540) % 360) - 180
-      deltas.push(delta)
-    }
+    // 每张卡片的角差：0 表示正对镜头，正负分列两侧
+    const deltas = list.map((_, i) => wrap(i - idx) * STEP - frac)
 
     // 唯一一张「最正对镜头」的卡片
-    let frontIdx = -1
-    let best = Infinity
+    let frontIdx = 0
     deltas.forEach((delta, i) => {
-      const abs = Math.abs(delta)
-      if (abs < best) {
-        best = abs
-        frontIdx = i
-      }
+      if (Math.abs(delta) < Math.abs(deltas[frontIdx])) frontIdx = i
     })
 
     list.forEach((card, i) => {
       if (!card) return
-      const abs = Math.abs(deltas[i])
+      const delta = deltas[i]
+      const abs = Math.abs(delta)
       const depth = Math.max(0, 1 - abs / 150)
-      const focus = Math.max(0, 1 - abs / 48)
-      card.style.setProperty('--delta', deltas[i].toFixed(2))
+      card.style.setProperty('--delta', delta.toFixed(2))
       card.style.setProperty('--depth', depth.toFixed(3))
-      card.style.setProperty('--focus', focus.toFixed(3))
+      card.style.setProperty('--focus', Math.max(0, 1 - abs / 48).toFixed(3))
       card.style.zIndex = String(Math.round(depth * 100) + 1)
+      // 绕回另一侧之前先在扇形边缘淡掉，看不到瞬移
+      card.style.opacity = Math.min(
+        1,
+        Math.max(0, (FADE_TO - abs) / (FADE_TO - FADE_FROM)),
+      ).toFixed(3)
       card.dataset.front = i === frontIdx ? 'true' : 'false'
     })
-  }, [])
+  }, [count, STEP])
 
   const setIndexBoth = useCallback((n) => {
     const next = ((n % count) + count) % count
@@ -94,7 +106,7 @@ export default function HeroReel({ items = [], onOpen }) {
       setIndexBoth(target)
       render()
     },
-    [count, render, setIndexBoth],
+    [count, render, setIndexBoth, STEP],
   )
 
   /* ---------- 主循环：自动旋转 / 惯性 / 吸附 ---------- */
@@ -131,7 +143,7 @@ export default function HeroReel({ items = [], onOpen }) {
 
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [render, setIndexBoth])
+  }, [render, setIndexBoth, STEP])
 
   useEffect(() => {
     render()
