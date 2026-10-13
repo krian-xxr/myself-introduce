@@ -16,6 +16,18 @@ Windows 上也可以直接双击 **`启动网页.cmd`** —— 它会起 dev ser
 
 > ⚠️ `dist/index.html` **不能直接双击打开**：构建产物是 ES module，`file://` 会被 CORS 拦掉（白屏）。要么起服务器，要么用 `npm run preview`。
 
+## 在另一台电脑上继续编辑
+
+源码连同素材不到 1MB（`node_modules` 那 340MB 到新机器重装即可），搬过去就能接着改。
+
+1. 在新电脑装 **Node.js LTS**（<https://nodejs.org>）
+2. 把工程放到任意目录：解压 `portfolio-source.zip`，或 `git clone` 这个仓库
+3. 在该目录开终端跑 `npm install`（第一次装依赖，几分钟）
+4. `npm run dev` → <http://localhost:5180/>；Windows 也可以直接双击 `启动网页.cmd`
+
+**两台机器怎么同步**：仓库远端是 `origin` → `github.com/krian-xxr/myself-introduce`。
+能连上 GitHub 的那台 `git push`，另一台 `git pull`。没有 git 同步时，别在两台机器上同时改同一个文件，改动会各走各的。
+
 ## 页面结构（单页，5 个大标题 + 首屏 + 收尾）
 
 导航里那 5 项就是页面的 5 个大标题（首页 / 联系我 分别由左侧品牌和右侧 ▷ LET'S TALK 承担，不占菜单位）：
