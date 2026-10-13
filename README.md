@@ -12,6 +12,10 @@ npm run build    # 产出 dist/
 npm run preview  # 本地预览构建产物
 ```
 
+Windows 上也可以直接双击 **`启动网页.cmd`** —— 它会起 dev server 并自动打开浏览器，关掉那个窗口即停止服务。
+
+> ⚠️ `dist/index.html` **不能直接双击打开**：构建产物是 ES module，`file://` 会被 CORS 拦掉（白屏）。要么起服务器，要么用 `npm run preview`。
+
 ## 页面结构（单页，5 个大标题 + 首屏 + 收尾）
 
 导航里那 5 项就是页面的 5 个大标题（首页 / 联系我 分别由左侧品牌和右侧 ▷ LET'S TALK 承担，不占菜单位）：
