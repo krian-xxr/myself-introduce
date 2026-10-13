@@ -10,9 +10,14 @@ export default defineConfig({
     port: 5180,
     strictPort: false,
     open: false,
-    // 监听所有网卡：同一局域网内的另一台电脑 / 手机可以直接打开 http://<本机IP>:5180/
-    host: true,
-    // 允许用计算机名访问（Vite 默认会以「Blocked request. This host is not allowed」403 掉）
-    allowedHosts: true,
+    /*
+     * 默认只绑本机（localhost），别人连不上。
+     * 需要让同一局域网的手机 / 另一台电脑临时预览时，把下面两行取消注释再重启：
+     *   host: true,
+     *   allowedHosts: true,
+     * ⚠️ 打开后同一 Wi-Fi 下任何人都能访问这个开发服务器，没有密码；用完记得关掉。
+     */
+    // host: true,
+    // allowedHosts: true,
   },
 })
